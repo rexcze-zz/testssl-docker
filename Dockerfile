@@ -1,5 +1,7 @@
 FROM ubuntu:yakkety
 
+ENV TESTSSLVERSION="v2.8rc3" 
+
 RUN apt-get update && apt-get install -y --no-install-recommends bsdmainutils ca-certificates curl dnsutils git aha python3 python3-pip gcc libc6-dev make perl zlib1g-dev python3-setuptools nginx supervisor\
 	&& apt-get clean
 
@@ -8,9 +10,7 @@ RUN pip3 install Flask
 
 RUN cd /usr/local/bin/ && git clone https://github.com/TKCERT/testssl.sh-webfrontend.git
 
-RUN git clone https://github.com/drwetter/testssl.sh.git /usr/local/bin/testssl.sh-webfrontend/testssl.sh/
-
-#ENTRYPOINT ["/usr/local/bin/testssl.sh-webfrontend/SSLTestPortal.py"]
+RUN git clone -b ${TESTSSLVERSION} --single-branch https://github.com/drwetter/testssl.sh.git /usr/local/bin/testssl.sh-webfrontend/testssl.sh/
 
 COPY files/docker-testssl.conf /etc/nginx/sites-enabled/docker-testssl.conf
 
